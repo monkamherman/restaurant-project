@@ -1,9 +1,11 @@
 import SEO from '@/components/ui/SEO'
 import React from 'react'
+import HeroSection from './component/HeroSection'
+import PopularCategorie from './component/PopularCategorie'
 
 const Home: React.FC = () => {
     return (
-        <>
+        <div className='dark:bg-dark'>
             {/* Seo compoments */}
             <SEO
                 title='Welcome to iPhone Store Cameroon - Your Trusted Apple Partner'
@@ -12,9 +14,10 @@ const Home: React.FC = () => {
 
             {/* App Comoments */}
             <>
-                Home
+                <HeroSection />
+                <PopularCategorie />
             </>
-        </>
+        </div>
     )
 }
 

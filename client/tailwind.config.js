@@ -22,6 +22,7 @@ export default {
   		},
   		colors: {
 			dark: "#152033",
+			color:"#39DB4A",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			footer: {

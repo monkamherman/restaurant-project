@@ -10,7 +10,7 @@ export function ModeToggle() {
     setTheme(theme === "light" ? "dark" : "light");
   };
   return (
-    <Button variant="outline" size="icon" className="dark:shadow-dark-mode shadow-light " onClick={toggleTheme}>
+    <Button variant="outline" size="icon" className="dark:shadow-dark-mode shadow-light dark:bg-dark " onClick={toggleTheme}>
       {/* Icône du soleil en mode clair */}
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:scale-0 dark:-rotate-90" />
       {/* Icône de la lune en mode sombre */}
