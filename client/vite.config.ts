@@ -24,12 +24,12 @@ export default defineConfig({
 
   server: {
     host: process.env.HOST || '0.0.0.0',
-    port: Number(process.env.PORT) || 4000,
+    port: Number(process.env.PORT) || 10000,
   },
 
   preview: {
     host: process.env.HOST || '0.0.0.0',
-    port: Number(process.env.PORT) || 4000,
+    port: Number(process.env.PORT) || 10000,
   },
 
   css: {
