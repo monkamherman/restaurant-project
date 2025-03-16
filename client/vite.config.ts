@@ -23,14 +23,15 @@ export default defineConfig({
   },
 
   server: {
-    host: process.env.HOST || '0.0.0.0',
-    port: Number(process.env.PORT) || 10000,
+    host: '0.0.0.0', // Valeur par défaut
+    port: 10000, // Valeur par défaut
   },
 
   preview: {
-    host: process.env.HOST || '0.0.0.0',
-    port: Number(process.env.PORT) || 10000,
+    host: '0.0.0.0', // Valeur par défaut
+    port: 10000, // Valeur par défaut
   },
+
 
   css: {
     postcss: './postcss.config.js',
