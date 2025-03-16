@@ -5,6 +5,8 @@ import Footer from '@/layouts/footer/Footer'
 // import ScrollProgress from '@/components/ui/scroll-progress'
 import ScrollToTop from '@/components/ui/ScrollToTop'
 import DynamicPageLoader from '@/components/ui/LazyCompoment'
+import AboutUsPage from '@/pages/about/About'
+import MenuPage from '@/pages/menu/Menu'
 
 /**
  * Creates a router with specified routes and elements for each route.
@@ -42,6 +44,18 @@ const Router = createBrowserRouter([
 						path: '/',
 						element: <DynamicPageLoader pageKey="home/Home" />
 					},
+					{
+						path: '/about',
+						element:<>
+						 <AboutUsPage/>
+						 </>
+					},
+					{
+						path: '/menu',
+						element:<>
+						 <MenuPage/>
+						 </>
+					}
 
 
 					// Authentication routes part

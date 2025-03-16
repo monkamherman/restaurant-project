@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { devtools } from 'zustand/middleware';
 import type { FetchState } from '@/interface/interface';
-import OfflineAlert from '../components/custom/utils/OfflineAlert';
+import OfflineAlert from '@/components/ui/OfflineAlert';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useFetchStore = create<FetchState<any>>()(

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import pageNoteFound from '/images/not-found-image.png'
-import SEO from '@/components/custom/utils/SEO'
+import pageNoteFound from '/404.png'
+import SEO from '@/components/ui/SEO'
 
 const PageError: React.FC = () => {
 	return (
@@ -16,7 +16,7 @@ const PageError: React.FC = () => {
 					<div className="w-fit">
 						<h1 className='bg-background p-0 w-fit mx-auto text-5xl md:text-6xl lg:text-7xl text-center font-bold'>
 							<span
-								className="bg-clip-text text-transparent bg-gradient-to-tr from-blue-500 via-[#c850c0] font-bold to-blue-500"
+								className="bg-clip-text text-transparent bg-color"
 							>
 								404
 							</span>
@@ -37,21 +37,21 @@ const PageError: React.FC = () => {
 					<div className="text-sm md:text-base mx-auto flex flex-wrap items-center gap-y-1 gap-4 md:gap-6 justify-center w-full capitalize">
 						<Link
 							to={'/'}
-							className="link-underline bg-clip-text text-transparent bg-gradient-to-tr from-blue-500 via-[#c850c0] to-blue-500 font-medium md:py-2"
+							className="link-underline bg-clip-text text-transparent bg-color font-medium md:py-2"
 						>
 							<span>Back to Home</span>
 						</Link>
 
 						<Link
 							to={'/products'}
-							className="link-underline bg-clip-text text-transparent bg-gradient-to-tr from-[#c850c0] to-blue-500 font-medium md:py-2"
+							className="link-underline bg-clip-text text-transparent bg-color font-medium md:py-2"
 						>
 							<span>view products</span>
 						</Link>
 
 						<Link
 							to={'/support'}
-							className="link-underline bg-clip-text text-transparent bg-gradient-to-tr from-blue-500 to-[#c850c0] font-medium md:py-2"
+							className="link-underline bg-clip-text text-transparent bg-color font-medium md:py-2"
 						>
 							<span>Contact Support</span>
 						</Link>

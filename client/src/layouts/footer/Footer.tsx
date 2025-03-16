@@ -1,134 +1,77 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import FlickeringGrid from "@/components/ui/flickering-grid";
-import { TextAnimate } from "@/components/ui/text-animate";
-// import { FootersLinks, SocialLink } from '@/core/mocks/footer.mock'
-
-/**
- * Functional component for rendering a footer
- * @parmams
- * @returns JSX element representing the footer
- * */
+// src/components/Footer.tsx
+import React from 'react';
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
   return (
-    <footer className='w-full border-t border-t-foreground/80'>
-      footer
+    <footer className="dark:bg-dark border-t-2 border-color shadow-dark py-8">
+      <div className="container mx-auto px-4 md:flex md:items-center">
+        {/* Logo et Description */}
+        <div className="mb-6 md:mb-0 md:w-1/4 space-y-4">
+          {/* <img src="/path/to/logo.png" alt="Logo" className="h-8 mb-4" /> */}
+      <div className="text-color font-bold text-xl">FOODI</div>
 
-      {/* Profile */}
-      <div className="border-t border-t-foreground/40 w-full px-1 py-[3px] space-x-1 font-light text-sm flex justify-center bg-foreground/50">
-        <span>Conception et Realisation par</span>
+          <p className="dark:text-white text-dark ">
+            Savourez l'art culinaire où <br />chaque plat est une œuvre d'art.
+          </p>
+        </div>
 
-        <TooltipProvider
-          delayDuration={100}
-        >
-          <Tooltip>
-            <TooltipTrigger>
-              <Link
-                to={'https://www.linkedin.com/in/herman-m-b565032b1/'}
-                target='_blank'
-                rel="noopener noreferrer"
-                className='font-normal text-primary/70 hover:text-primary/70 hover:underline duration-200 text-nowrap'
-              >
-               Moukam Herman
-              </Link>
-            </TooltipTrigger>
+        {/* Liens Utiles */}
+        <div className="md:w-1/4">
+          <h3 className="text-lg font-bold mb-4">Liens Utiles</h3>
+          <ul>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">À propos</a></li>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">Événements</a></li>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">FAQ</a></li>
+          </ul>
+        </div>
 
-            <TooltipContent className='px-6 py-2 relative bg-footer border border-footer-foreground text-footer-foreground text-xs'>
-              <p className='relative z-30 space-y-3 leading-4'>
-                <p className="flex flex-col gap-2">
-                  <span className="bg-footer w-fit">
-                    <TextAnimate animation="slideLeft" by="character">
-                      Hello, je suis Moukam Herman,
-                    </TextAnimate>
-                  </span>
-                  <p className="">
-                    <span className="bg-footer">
-                      Je suis un <b>Developpeur Web MERN-stack </b> passioner,
-                    </span>
-                    <br />
-                    <span className="bg-footer">
-                      specializing in crafting efficient and tailored digital solutions.
-                    </span>
-                    <br />
-                    <span className="bg-footer">
-                      An expert in transforming ideas into modern applications,
-                    </span>
-                    <br />
-                    <span className="bg-footer">
-                      I combine creativity with technical precision.
-                    </span>
-                    <br />
-                    <span className="bg-footer">
-                      Always seeking innovation, I am committed to tackling
-                    </span>
-                    <br />
-                    <span className="bg-footer">
-                      digital challenges with professionalism and efficiency.
-                    </span>
-                  </p>
-                </p>
+        {/* Menu Principal */}
+        <div className="md:w-1/4">
+          <h3 className="text-lg font-bold mb-4">Menu Principal</h3>
+          <ul>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">Accueil</a></li>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">Offres</a></li>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">Menus</a></li>
+            <li><a href="#" className="block dark:text-white text-dark hover:text-green-500">Réservation</a></li>
+          </ul>
+        </div>
 
-                <p className="flex items-center gap-10">
-                  <p className="bg-footer flex flex-col gap-2 leading-3 w-fit">
-                    <span>je suis disposer a vous repondre</span>
-                    <span>contacter moi</span>
-                  </p>
+        {/* Nous Contacter */}
+        <div className="md:w-1/4">
+          <h3 className="text-lg font-bold mb-4">Nous Contacter</h3>
+          <p className="dark:text-white text-dark">
+            <a href="mailto:example@email.com" className="hover:text-green-500">herman.moukam5@gmail.com</a>
+          </p>
+          <p className="dark:text-white text-dark">
+            <a href="tel:+64958248966" className="hover:text-green-500">+237 658 852 731</a>
+          </p>
+          <p className="dark:text-white text-dark">Réseaux sociaux</p>
+        </div>
+      </div>
 
-                  {/* Contact Informations */}
-                  <div className="leading-4">
-                    <p className="bg-footer w-fit">
-                      Linkedin:
-                      <Link
-                        to={'https://www.linkedin.com/in/herman-m-b565032b1/'}
-                        target='_blank'
-                        className='font-medium text-primary/85 hover:text-primary duration-200 text-nowrap'
-                      >
-                        <TextAnimate animation="blurIn" className='inline ml-2'>
-                          Mon profile LinkedIn 
-                        </TextAnimate>
-                      </Link>
-                    </p>
+      {/* Réseaux Sociaux */}
+      <div className="flex justify-center space-x-4 mt-4">
+        <a href="#" className="text-green-500 hover:text-green-700">
+          <FaInstagram size={24} />
+        </a>
+        <a href="#" className="text-green-500 hover:text-green-700">
+          <FaTwitter size={24} />
+        </a>
+        <a href="#" className="text-green-500 hover:text-green-700">
+          <FaYoutube size={24} />
+        </a>
+        <a href="#" className="text-green-500 hover:text-green-700">
+          <FaFacebook size={24} />
+        </a>
+      </div>
 
-                    <p className="bg-footer w-fit">
-                      Whatsapp:
-                      <Link
-                        to={'https://wa.me/237658852731?text=bonjour%20Moukam%20Herman%20dev'}
-                        target='_blank'
-                        rel="noopener noreferrer"
-                        className='font-medium text-primary/85 hover:text-primary duration-200 text-nowrap'
-                      >
-                        <TextAnimate animation="blurIn" by="character" className='inline ml-2'>
-                          +237 658 852 731
-                        </TextAnimate>
-                      </Link>
-                    </p>
-                  </div>
-                </p>
-              </p>
-
-              <FlickeringGrid
-                className="z-0 absolute inset-0 size-full"
-                squareSize={4}
-                gridGap={6}
-                color="#2f22f2"
-                maxOpacity={0.3}
-                flickerChance={0.8}
-                height={800}
-                width={800}
-              />
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      {/* Copyright */}
+      <div className="text-center mt-4 dark:text-white text-dark">
+        Copyright © 2025 Herman dev | Tous droits réservés
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -2,6 +2,8 @@ import SEO from '@/components/ui/SEO'
 import React from 'react'
 import HeroSection from './component/HeroSection'
 import PopularCategorie from './component/PopularCategorie'
+import SpecialeDesher from './component/SpecialeDesher'
+import AutreServices from './component/AutreServices'
 
 const Home: React.FC = () => {
     return (
@@ -16,6 +18,8 @@ const Home: React.FC = () => {
             <>
                 <HeroSection />
                 <PopularCategorie />
+                <SpecialeDesher />
+                <AutreServices />
             </>
         </div>
     )
