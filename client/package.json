@@ -1,29 +1,10 @@
 {
   "name": "react-template",
-  "private": "false",
+  "private": "true",
   "version": "0.0.0",
   "description": "description of the projet",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/01Barthez/start-react-projet"
-  },
-  "homepage": "https://github.com/01Barthez/start-react-projet#readme",
-  "readme": "https://github.com/01Barthez/start-react-projet#readme",
-  "bugs": {
-    "url": "https://github.com/01Barthez/start-react-projet/issues"
-  },
-  "author": {
-    "name": "Barthez Kenwou",
-    "email": "kenwoubarthez@gmail.com",
-    "url": "https://github.com/01Barthez"
-  },
   "license": "MIT",
   "main": "index.html",
-  "keywords": [
-    "list",
-    "of",
-    "keywords"
-  ],
   "type": "module",
   "engines": {
     "node": ">=v20.18.1",
@@ -32,7 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "rimraf dist && vite build",
+    "build": "tsc -b && vite build",
     "build:test": "NODE_ENV=production rimraf /tmp/dist && vite build --outDir /tmp/dist",
     "docker:build": "docker build -t react-started .",
     "docker:start": "docker run -p 4001:3000 react-started",
