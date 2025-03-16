@@ -1,0 +1,4 @@
+# runtime: nodejs
+# nodeVersion: "22.12.0"
+# buildCommand: "yarn install && yarn build"
+# startCommand: "vite preview"
