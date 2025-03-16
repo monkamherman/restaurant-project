@@ -118,7 +118,7 @@
     "@testing-library/react": "^16.1.0",
     "@types/dotenv": "^8.2.3",
     "@types/node": "^22.10.2",
-    "@types/react": "^19.0.2",
+    "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.2",
     "@types/swiper": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
@@ -149,6 +149,6 @@
     "typedoc": "^0.27.5",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.15.0",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.8"
   }
 }

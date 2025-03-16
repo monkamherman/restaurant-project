@@ -1,5 +1,6 @@
 import React from 'react'
-import SEO from '@/components/custom/utils/SEO'
+import SEO from '@/components/ui/SEO'
+
 
 const Register: React.FC = () => {
     return (
