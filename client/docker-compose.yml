@@ -3,9 +3,9 @@ services:
   app:
     build: .
     image: 01barthez/iphone-cameroon
-    container_name: iphone-cameroon-app
+    container_name: resto
     ports:
-      - '4000:4000'
+      - '10000:10000'
     secrets:
       - app_env
     volumes:
@@ -23,8 +23,7 @@ services:
     volumes:
       - ./nginx-config:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
-    ports:
-      - '8080:80'
+    
     secrets:
       - app_env
     networks:
