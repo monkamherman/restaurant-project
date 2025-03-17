@@ -1,0 +1,34 @@
+[http.routers]
+  [http.routers.client]
+    rule = "Host(`client.foodi.infy.uk`)"
+    service = "client"
+    entryPoints = ["websecure"]
+    tls = true
+
+  [http.routers.manager]
+    rule = "Host(`manager.foodi.infy.uk`)"
+    service = "manager"
+    entryPoints = ["websecure"]
+    tls = true
+
+  [http.routers.programme]
+    rule = "Host(`programme.foodi.infy.uk`)"
+    service = "programme"
+    entryPoints = ["websecure"]
+    tls = true
+
+[http.services]
+  [http.services.client.loadBalancer]
+    servers = [
+      { url = "http://client:10000" }
+    ]
+
+  [http.services.manager.loadBalancer]
+    servers = [
+      { url = "http://manager:5000" }  # Port utilisé par le service Node.js
+    ]
+
+  [http.services.programme.loadBalancer]
+    servers = [
+      { url = "http://programme:8000" }  # Port utilisé par le service Python
+    ]

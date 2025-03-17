@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./traefik/traefik.yml:/etc/traefik/traefik.yml"
+      - "./traefik/acme.json:/etc/traefik/acme.json"
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`dashboard.foodi.infy.uk`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+
+  client:
+    build:
+      context: ./client
+    container_name: client
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`client.foodi.infy.uk`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls=true"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+    networks:
+      - traefik-public
+
+  manager:
+    build:
+      context: ./server/manager
+    container_name: manager
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.manager.rule=Host(`manager.foodi.infy.uk`)"
+      - "traefik.http.routers.manager.entrypoints=websecure"
+      - "traefik.http.routers.manager.tls=true"
+      - "traefik.http.routers.manager.tls.certresolver=letsencrypt"
+    networks:
+      - traefik-public
+
+  programme:
+    build:
+      context: ./server/programme
+    container_name: programme
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.programme.rule=Host(`programme.foodi.infy.uk`)"
+      - "traefik.http.routers.programme.entrypoints=websecure"
+      - "traefik.http.routers.programme.tls=true"
+      - "traefik.http.routers.programme.tls.certresolver=letsencrypt"
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true

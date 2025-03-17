@@ -11,38 +11,27 @@ services:
     volumes:
       - ./:/app
       - ./logs:/app/logs
-    networks:
-      - iphone-cameroon
     command: ['yarn', 'start']
 
-  # Set up nginx service as reverse proxy
-  nginx:
-    image: nginx:1.27.2-alpine-slim
-    restart: always
-    container_name: iphone-cameroon-nginx
-    volumes:
-      - ./nginx-config:/etc/nginx/conf.d
-      - ./logs/nginx:/var/log/nginx
-    
-    secrets:
-      - app_env
+  # Set up nginx service as reverse proxyversion: '3.8'
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`client.foodi.infy.uk`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
     networks:
-      - iphone-cameroon
-    depends_on:
-      - app
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost']
-      interval: 20s
-      timeout: 10s
-      retries: 3
+      - traefik-public
 
 secrets:
   app_env:
     file: .env
 
-volumes:
-  nginx-config:
 
 networks:
-  iphone-cameroon:
-    driver: bridge
+  traefik-public:
+    external: true
