@@ -1,13 +1,14 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
+import AdminRoute from './AdminRoute';
 import Navbar from '@/layouts/navbar/Header';
 import Footer from '@/layouts/footer/Footer';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import DynamicPageLoader from '@/components/ui/LazyCompoment';
 import AboutUsPage from '@/pages/about/About';
 import MenuPage from '@/pages/menu/Menu';
-import SecureRoute from './SecureRoute'; // Importez SecureRoute
+import AdminLayout from '@/admin/adminlayout';
 
-const isAuthenticated = true; // Remplacez par votre logique d'authentification
+// const isAuthenticated = true; // Remplacez par votre logique d'authentification
 
 const Router = createBrowserRouter([
   {
@@ -45,23 +46,32 @@ const Router = createBrowserRouter([
             element: <MenuPage />,
           },
 
+
+
 		  {
 			path: '/login',
 			element: <DynamicPageLoader pageKey="auth/Login" />,
 		  },
-          // Route sécurisée
-          {
-            path: '/dashboard',
-            element: (
-              <SecureRoute isAuthenticated={isAuthenticated} redirectPath="/login">
-                <DynamicPageLoader pageKey="dashboard/Dashboard" />
-              </SecureRoute>
-            ),
-          },
+          
         ],
       },
     ],
   },
+  {
+    path: '',
+    element: (
+      <>
+        <AdminLayout />
+        <ScrollToTop />
+      </>
+    ),
+    errorElement: <DynamicPageLoader pageKey="error/PageError" />,
+    children: [
+
+
+      AdminRoute
+    ]
+  }
 ]);
 
 export default Router;

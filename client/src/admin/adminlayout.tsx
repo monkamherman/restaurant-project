@@ -1,15 +1,15 @@
 // AdminLayout.jsx
 import { Outlet } from 'react-router-dom';
+import AdminHeader from '@/pages/admin/component/AdminHeader';
 
 const AdminLayout = () => (
-  <div className="admin-container">
-    <AdminSidebar />
+  <div className="admin-container bg-dark">
+      <AdminHeader />
     <main>
-      <AdminNavbar />
       <Outlet /> {/* Contenu dynamique ici */}
     </main>
   </div>
 );
 
 
-exporte default AdminLayout
+export default AdminLayout
