@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   traefik:
@@ -43,7 +42,7 @@ services:
     networks:
       - traefik-public
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:10000"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -65,7 +64,7 @@ services:
     networks:
       - traefik-public
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3

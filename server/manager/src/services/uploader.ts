@@ -1,7 +1,6 @@
 
 import { Upload } from "@aws-sdk/lib-storage";
 import fs from "fs";
-import log from "../utils/logger";
 import client from "../services/s3client";
 import { envs } from "../core/config/env";
 
@@ -29,14 +28,14 @@ export const uploadToMinIO = async (
 
         const result = await upload.done();
 
-    log.info("Fichier uploadé avec succès:", result.Location);
+    console.log("Fichier uploadé avec succès:", result.Location);
 
     if (!result.Location) {
         throw new Error("L'URL du fichier n'a pas été retournée par MinIO.");
     }
     return result.Location;
     } catch (error) {
-        log.info("Erreur lors de l'upload vers MinIO:", error);
+        console.log("Erreur lors de l'upload vers MinIO:", error);
         throw error;
     } finally {
         // Supprimer le fichier temporaire

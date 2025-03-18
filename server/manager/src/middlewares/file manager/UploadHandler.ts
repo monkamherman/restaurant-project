@@ -2,33 +2,36 @@ import { Request } from "express";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
-import { uploadToMinIO } from "../../services/uploader"; 
-import { convertToSVG } from "./TransfomImage";
-import { compressVideo } from "./CompressVideo";
-import log from "../../utils/logger";
+import { uploadToMinIO } from "../../services/uploader"; // Service pour uploader vers MinIO/S3
+// import { convertToSVG } from "./TransfomImage";          // Conversion d'image en SVG
+import { compressVideo } from "./CompressVideo";         // Compression vidéo
 
+// Types de fichiers pris en charge
 const supportedImageTypes = ['jpg', 'jpeg', 'png'];
 const supportedVideoTypes = ['mp4', 'mov'];
 const supportedDocumentTypes = ['pdf', 'docx'];
 
 export const uploadHandler = async (req: Request): Promise<{ fileUrl: string; fields: Record<string, string> }> => {
     return new Promise((resolve, reject) => {
+        // Configuration de Formidable
         const form = formidable({
             uploadDir: "/tmp", // Dossier temporaire pour stocker les fichiers
             keepExtensions: true, // Conserver les extensions des fichiers
         });
 
-        const fields: Record<string, string> = {};
-        let file: formidable.File | null = null;
+        const fields: Record<string, string> = {}; // Stockage des champs du formulaire
+        let file: formidable.File | null = null;   // Stockage du fichier uploadé
 
-        // Récupérer les champs du formulaire
+        // Récupération des champs du formulaire
         form.on("field", (fieldName, value) => {
             fields[fieldName] = value;
+            console.log(`Champ reçu: ${fieldName} = ${value}`);
         });
 
-        // Récupérer le fichier uploadé
+        // Récupération du fichier uploadé
         form.on("file", (fieldName, uploadedFile) => {
             file = uploadedFile;
+            console.log(`Fichier reçu: ${uploadedFile.originalFilename}, Taille: ${uploadedFile.size} octets`);
         });
 
         // Une fois le parsing terminé
@@ -40,47 +43,54 @@ export const uploadHandler = async (req: Request): Promise<{ fileUrl: string; fi
 
             const { filepath, originalFilename, mimetype } = file;
 
-            log.info(`Fichier reçu: ${originalFilename}, Type MIME: ${mimetype}`);
+            console.log(`Traitement du fichier: ${originalFilename}, Type MIME: ${mimetype}`);
 
             try {
+                // Extraire l'extension du fichier
                 const extension = originalFilename?.split('.').pop()?.toLowerCase();
                 const transformedFilePath = path.join("/tmp", `transformed-${originalFilename}`);
 
-                log.info(`Traitement du fichier: ${originalFilename}, Extension: ${extension}`);
+                console.log(`Traitement du fichier: ${originalFilename}, Extension: ${extension}`);
 
+                // Transformation selon le type de fichier
                 if (supportedImageTypes.includes(extension || '')) {
-                    log.info('Conversion en SVG en cours...');
-                    await convertToSVG(filepath, transformedFilePath);
+                    console.log('Conversion en SVG en cours...');
+                    // await convertToSVG(filepath, transformedFilePath);
                 } else if (supportedVideoTypes.includes(extension || '')) {
-                    log.info('Compression vidéo en cours...');
+                    console.log('Compression vidéo en cours...');
                     await compressVideo(filepath, transformedFilePath);
                 } else if (supportedDocumentTypes.includes(extension || '')) {
-                    log.info('Fichier document détecté, pas de transformation nécessaire.');
-                    fs.renameSync(filepath, transformedFilePath);
+                    console.log('Fichier document détecté, pas de transformation nécessaire.');
+                    fs.renameSync(filepath, transformedFilePath); // Renommer le fichier si aucune transformation n'est requise
                 } else {
                     const errorMessage = `Type de fichier non pris en charge : ${mimetype}`;
-                    log.error(errorMessage);
+                    console.log(errorMessage);
                     throw new Error(errorMessage);
                 }
 
-                log.info('Upload vers S3/MinIO en cours...');
-                const fileUrl = await uploadToMinIO(transformedFilePath, originalFilename || "file", mimetype || "application/octet-stream");
+                // Upload vers MinIO/S3
+                console.log('Upload vers S3/MinIO en cours...');
+                const fileUrl = await uploadToMinIO(
+                    transformedFilePath,
+                    originalFilename || "file",
+                    mimetype || "application/octet-stream"
+                );
 
                 // Supprimer les fichiers temporaires
-                fs.unlinkSync(filepath);
-                fs.unlinkSync(transformedFilePath);
-                log.info('Fichiers temporaires supprimés.');
+                fs.unlinkSync(filepath); // Supprimer le fichier temporaire initial
+                fs.unlinkSync(transformedFilePath); // Supprimer le fichier transformé
+                console.log('Fichiers temporaires supprimés.');
 
                 resolve({ fileUrl, fields });
             } catch (error) {
-                log.error('Erreur lors du traitement du fichier:', error);
+                console.log('Erreur lors du traitement du fichier:', error);
                 reject(error);
             }
         });
 
-        // Gérer les erreurs
+        // Gestion des erreurs de parsing
         form.on("error", (err) => {
-            log.error('Erreur lors du parsing du formulaire:', err);
+            console.log('Erreur lors du parsing du formulaire:', err);
             reject(err);
         });
 

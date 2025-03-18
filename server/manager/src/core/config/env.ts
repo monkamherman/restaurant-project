@@ -19,6 +19,16 @@ export const envs = {
 
 	mot_de_passe: "ybfm tkhc pyaa bmuy",
 	address_mail: "cesaristos85@gmail.com",
+	access_key: get('access_key').required().asString(),
+	secret_key: get('secret_key').required().asString(),
+
+	MINIO_HOST: get('MINIO_HOST').default('localhost').asString(),
+	MINIO_PORT: get('MINIO_PORT').default('9001').asString(),
+	REGION_AWS: get('REGION_AWS').default('us-east-1').asString(),
+	BUCKET_NAME: get('BUCKET_NAME').required().asString(),
+	DATABASE_URL: get('DATABASE_URL').required().asString(),
+	MINIO_ROOT_USER: get('MINIO_ROOT_USER').required().asString(),
+	MINIO_ROOT_PASSWORD: get('MINIO_ROOT_PASSWORD').required().asString(),
 };
 
 export const CONNECTION_STRING = `mongodb://${envs.MONGO_INITDB_ROOT_USERNAME}:${envs.MONGO_INITDB_ROOT_PASSWORD}@${envs.MONGO_HOST}:${envs.MONGO_PORT}/${envs.MONGO_DB_NAME}?authSource=admin`;

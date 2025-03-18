@@ -1,7 +1,9 @@
 import SEO from '@/components/ui/SEO'
 import React from 'react'
-
+import { useAuth } from '../../contexts/AuthContext';
+ 
 const Login: React.FC = () => {
+  const { login } = useAuth();
   return (
     <>
       <SEO
@@ -10,7 +12,9 @@ const Login: React.FC = () => {
       />
 
       <>
-        Login
+      <h1>Page de connexion</h1>
+      <button onClick={login}>Se connecter</button>
+
       </>
     </>
   )

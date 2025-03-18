@@ -1,6 +1,6 @@
 // src/server.ts
 import express from 'express';
-import rateLimit from 'express-rate-limit';
+// import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import cors from 'cors';
 import { ONE_HUNDRED, SIXTY } from './core/constants';

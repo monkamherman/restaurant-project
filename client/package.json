@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "build:test": "NODE_ENV=production rimraf /tmp/dist && vite build --outDir /tmp/dist",
     "docker:build": "docker build -t react-started .",

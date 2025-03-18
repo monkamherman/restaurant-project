@@ -1,7 +1,7 @@
 import express from "express";
 import user from "./route";
 
-const app = express();
+// const app = express();
 
 
 export default function registerRoutes(app: express.Application) {
