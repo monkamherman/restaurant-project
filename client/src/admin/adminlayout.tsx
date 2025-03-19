@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 import AdminHeader from '@/pages/admin/component/AdminHeader';
 
 const AdminLayout = () => (
-  <div className="admin-container bg-dark">
+  <div className="admin-container bg-dark ">
       <AdminHeader />
-    <main>
+    <main className='p-6'>
       <Outlet /> {/* Contenu dynamique ici */}
     </main>
   </div>

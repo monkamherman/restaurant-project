@@ -31,7 +31,7 @@ const PageError: React.FC = () => {
 					</p>
 
 					{/* Line of separation */}
-					<div className="w-full border bg-white rounded-full shadow-md "></div>
+					<hr className='bg-white h-1 w-full '/>
 
 					{/* Redirection links */}
 					<div className="text-sm md:text-base mx-auto flex flex-wrap items-center gap-y-1 gap-4 md:gap-6 justify-center w-full capitalize">

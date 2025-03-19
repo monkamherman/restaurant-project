@@ -4,9 +4,9 @@ import { DishList } from './component/DishList';
 
 const Menu: React.FC = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Gestion du Menu</h1>
-      <section className="mt-6">
+    <div className='flex flex-col items-center justify-center gap-4'>
+      <h1 className="  text-2xl font-bold">Gestion du Menu</h1>
+      <section className="mt-6 space-y-4">
         <h2 className="text-xl font-semibold">Ajouter un Plat</h2>
         <FormAddDish />
       </section>

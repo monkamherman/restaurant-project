@@ -8,13 +8,28 @@
     "npm": ">=10.8.2"
   },
   "scripts": {
+    "prepare": "husky install",
     "dev": "ts-node-dev --respawn --clear --transpile-only --ignore-watch node_modules ./src/app.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "keywords": [],
   "author": "",
-  "license": "herman dev",
+  "license": "MIT",
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.5.0",

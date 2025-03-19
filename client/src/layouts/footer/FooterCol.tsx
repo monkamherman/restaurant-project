@@ -1,7 +1,6 @@
 import type { IFootersLinks } from '@/interface/interface';
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Functional component for rendering a footer column with links.
@@ -11,6 +10,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 const FooterCol: React.FC<IFootersLinks> = (props) => {
     const FooterLinks = props.links;
+
+    function generateUUID(): string {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+      
 
     return (
         <div className='text-foreground text-nowrap flex flex-col gap-2 items-center md:items-start'>
@@ -23,7 +31,7 @@ const FooterCol: React.FC<IFootersLinks> = (props) => {
             <ul className="space-y-2 md:space-y-4 text-foreground/80 text-sm text-center md:text-left">
                 {
                     FooterLinks.map((link) => (
-                        <li key={uuidv4()} className="">
+                        <li key={generateUUID()} className="">
                             <Link
                                 to={link.url}
                                 className='inline-block text-sm linkhover font-light'
