@@ -17,4 +17,71 @@ datasource db {
 model users {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name String
+  email String @unique
+  password String
+  role Role @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  numero Int
+}
+
+model tables {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  status TableStatus @default(AVAILABLE)
+  capacity Int
+}
+
+model plats {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  price Float
+  image String?
+  category String
+  likes Int @default(0)
+  categorie PlatsCategory
+}
+
+model commande {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  status CommandeStatus @default(en_attente)
+  prix Float
+  nombreDePlats Int
+  adresse String
+  date DateTime @default(now())
+}
+
+model avis {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  message String
+  date DateTime @default(now())
+ 
+}
+
+enum CommandeStatus {
+  en_attente
+  confirmer
+  experdier
+  annuler
+  livrer
+}
+
+enum PlatsCategory {
+  STARTER
+  MAIN
+  DESSERT
+  DRINK
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
 }
