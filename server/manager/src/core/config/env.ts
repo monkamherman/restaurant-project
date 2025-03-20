@@ -22,6 +22,10 @@ export const envs = {
 	access_key: get('access_key').required().asString(),
 	secret_key: get('secret_key').required().asString(),
 
+
+	token_key: "ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBinGbUCMLS8aa+pnN1WUlPv9ijBKvmAdphVw5GV7fWO",
+	refresh_token: "ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPCHVQ9tVNeS/Mh/kF1K/uGLQvNTVuGbZOVT+I0FpHI5",
+
 	MINIO_HOST: get('MINIO_HOST').default('localhost').asString(),
 	MINIO_PORT: get('MINIO_PORT').default('9001').asString(),
 	REGION_AWS: get('REGION_AWS').default('us-east-1').asString(),
