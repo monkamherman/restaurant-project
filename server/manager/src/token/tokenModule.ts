@@ -1,44 +1,29 @@
 import jwt from 'jsonwebtoken';
-import { envs } from '../core/config/env';
 
-interface  Ipaylaod {
-    user_id: string,
-    name: string,
-    password: string,
-    email: string,
-    role: string
-    
+interface DecodedToken {
+  user_id: string;
+  role?: string;
+  exp?: number;
 }
 
-const tokenModule = {
-    createToken : (payload: Ipaylaod) => {
-        return jwt.sign(payload, envs.token_key, {expiresIn: "1h"})
-    },
-    verifyAccessToken : (token: string): Ipaylaod | null => {
-        try {
-            return jwt.verify(token, envs.token_key) as Ipaylaod
-        } catch (error) {
-            console.error("Erreur de vérification du token d'accès:",error)
-            return null
-        }
-    },
+// Vérifier le token d'accès
+export const verifyAccessToken = (token: string): DecodedToken | null => {
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as DecodedToken;
+    return decoded;
+  } catch (error) {
+    console.error("Erreur de vérification du token d'accès:",error)
+    return null;
+  }
+};
 
-    //: null | { [key: string]: any } | string pour la getion des erreur typescript
-
-    decodeAccessToken : (token: string): null | { [key: string]: any } | string => {
-        return jwt.decode(token)
-    },
-
-    createRefreshtoken: (payload: Ipaylaod) => {
-        return jwt.sign(payload, envs.refresh_token, {expiresIn: "30d"})
-    },
-    verifyRefreshToken : (token:string): Ipaylaod | null => {
-        return jwt.verify(token, envs.refresh_token) as Ipaylaod
-    },
-    decodeAccessrefreshToken : (token: string): null | { [key: string]: any } | string => {
-        return jwt.decode(token)
-    },
-    
-}
-
-export default tokenModule
+// Vérifier le token de rafraîchissement
+export const verifyRefreshToken = (token: string): DecodedToken | null => {
+  try {
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as DecodedToken;
+    return decoded;
+  } catch (error) {
+    console.error("Erreur de vérification du token de rafraîchissement:",error)
+    return null;
+  }
+};

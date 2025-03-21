@@ -26,7 +26,7 @@ const Router = createBrowserRouter([
         element: (
           <>
             <Navbar />
-            <div className='min-h-[80vh] md:p-8 p-4 dark:bg-dark dark:border-t-2 border-color'>
+            <div className=' md:p-8 p-4 dark:bg-dark dark:border-t-2 border-color'>
               <Outlet />
             </div>
             <Footer />
@@ -45,13 +45,22 @@ const Router = createBrowserRouter([
             path: '/menu',
             element: <MenuPage />,
           },
-
-
-
 		  {
 			path: '/login',
 			element: <DynamicPageLoader pageKey="auth/Login" />,
 		  },
+      {
+        path: '/register',
+        element: <DynamicPageLoader pageKey="auth/Register" />,
+      },
+      {
+        path: '/verify-otp',
+        element : <DynamicPageLoader pageKey="auth/VerifyOTP" />
+      },
+      {
+        path: '/register-final',
+        element: <DynamicPageLoader pageKey="auth/FinalSubmit" />
+      }
           
         ],
       },

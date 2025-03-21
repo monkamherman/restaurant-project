@@ -1,13 +1,13 @@
 {
-  "exclude": ["node_modules", "dist", "src/**/*.test.ts"],
-  "include": ["src/**/*", "src/core/config/index.ts"],
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*", "src/core/config/index.ts", "src/**/*.test.ts"],
   "compilerOptions": {
-    "types": ["node", "express"],
+    "types": ["node", "express", "jest"],
     "target": "ESNext",
     "module": "ESNext",
     "rootDir": "./src",
     "moduleResolution": "Node",
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "src/types"],
     "sourceMap": true,
     "outDir": "dist/",
     "esModuleInterop": true,
