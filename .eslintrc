@@ -1,7 +1,9 @@
 {
     "env": {
       "node": true,
-      "ESNext": true
+      "ESNext": true,
+      "browser": true,
+    "jquery": true
     },
     "extends": [
       "eslint:recommended",

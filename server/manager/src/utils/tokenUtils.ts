@@ -1,17 +1,12 @@
 import { Request, Response } from 'express';
 
 // Fonction pour extraire les tokens
-export const extractToken = (req: Request, type: 'access' | 'refresh') => {
-  if (type === 'access') {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return null;
-    }
-    return authHeader.split(' ')[1]; // Extraire le token après "Bearer"
-  } else if (type === 'refresh') {
-    return req.cookies?.cook_emp_xyz || null; // Extraire le refresh token des cookies
+export const extractToken = (req: Request): string | undefined => {
+  const authHeader = req.headers?.authorization; // Use optional chaining
+  if (!authHeader) {
+      return undefined; // Return undefined if no authorization header
   }
-  return null;
+  return authHeader.split(' ')[1]; // Assuming Bearer token format
 };
 
 // Gestion centralisée des erreurs

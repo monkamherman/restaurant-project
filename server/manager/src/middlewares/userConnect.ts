@@ -18,7 +18,7 @@ export const userConnect = {
   // Middleware pour vérifier le token d'accès
   verifyAccessToken: async (req: CustumRequest, res: Response, next: NextFunction) => {
     try {
-      const AccessToken = extractToken(req, 'access');
+      const AccessToken = extractToken(req);
       if (!AccessToken) {
         return handleError(res, HttpCode.UNAUTHORIZED, ERROR_MESSAGES.NO_ACCESS_TOKEN);
       }
@@ -38,7 +38,7 @@ export const userConnect = {
   // Middleware pour vérifier le token de rafraîchissement
   verifyRefreshToken: async (req: CustumRequest, res: Response, next: NextFunction) => {
     try {
-      const RefreshToken = extractToken(req, 'refresh');
+      const RefreshToken = extractToken(req);
       if (!RefreshToken) {
         return handleError(res, HttpCode.UNAUTHORIZED, ERROR_MESSAGES.NO_REFRESH_TOKEN);
       }
