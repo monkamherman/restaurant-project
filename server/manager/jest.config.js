@@ -2,9 +2,9 @@
 export default {
   preset: 'ts-jest',
   verbose: true,
-  testEnvironment: "node",
+  testEnvironment: 'node',
   transform: {
-    "^.+\\.tsx?$": ["ts-jest",{}],
+    '^.+\\.tsx?$': ['ts-jest', {}],
   },
-  moduleFileExtensions: ['ts', 'js'], 
+  moduleFileExtensions: ['ts', 'js'],
 };
