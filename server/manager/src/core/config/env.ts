@@ -33,6 +33,8 @@ export const envs = {
 	DATABASE_URL: get('DATABASE_URL').required().asString(),
 	MINIO_ROOT_USER: get('MINIO_ROOT_USER').required().asString(),
 	MINIO_ROOT_PASSWORD: get('MINIO_ROOT_PASSWORD').required().asString(),
+
+	ALLOWED_ORIGINS: get('ALLOWED_ORIGINS').required().asString(),
 };
 
 export const CONNECTION_STRING = `mongodb://${envs.MONGO_INITDB_ROOT_USERNAME}:${envs.MONGO_INITDB_ROOT_PASSWORD}@${envs.MONGO_HOST}:${envs.MONGO_PORT}/${envs.MONGO_DB_NAME}?authSource=admin`;

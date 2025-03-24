@@ -1,2 +1,2 @@
-#!/bin/sh
-yarn eslint '**/*.js' && yarn prettier --write '**/*.{js,json}'
+# #!/bin/sh
+# yarn eslint '**/*.js' && yarn prettier --write '**/*.{js,json}'

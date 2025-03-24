@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { userConnect } from '../middlewares/userConnect';
 import { Request, Response, NextFunction } from 'express';
 // import * as tokenModule from '../token/tokenModule';

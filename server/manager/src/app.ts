@@ -7,9 +7,10 @@ import { ONE_HUNDRED, SIXTY } from './core/constants/index';
 import { logger } from 'env-var';
 import { createClient } from 'redis';
 import helmet from 'helmet';
-import { registerRoutes } from './routes/crud';
+import { registerRoutes } from './routes';
 // import compression from 'compression';
 import cacheControl from 'express-cache-controller';
+import './utils/cronJobs'
 // import user from './routes/userRoute';
 // import plat from './routes/platRoute';
 
@@ -37,6 +38,10 @@ const redisClient = createClient({
 
 startServer()
 
+
+
+
+
 const morganStream = {
 	write: (message: string) => {
 		logger('http', message.trim());
@@ -46,10 +51,7 @@ const morganStream = {
 const app = express();
 app.use(express.json());
 
-// const registerRoutes = (app: express.Application) => {
-//   app.use('/api/', user);
-//   app.use('/plat', plat);
-// };
+
 
 registerRoutes(app);
 

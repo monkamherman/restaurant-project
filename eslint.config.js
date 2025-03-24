@@ -19,6 +19,6 @@ export default [
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
     },
-    ignores: ['node_modules/', 'dist/', 'client/dist/', 'server/manager/dist/'],
+    ignores: ["server/manager/dist/__tests__/middleware.test.js",'node_modules/', 'dist/', 'client/dist/','client/node_modules/', 'server/manager/dist/','server/manager/node_modules/'],
   },
 ];

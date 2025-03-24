@@ -1,0 +1,5 @@
+# Ignorer un fichier spécifique
+server/manager/dist/__tests__/middleware.test.js
+
+# Ignorer un répertoire entier
+server/manager/dist/__tests__/

@@ -1,10 +1,10 @@
 // Fichier api.ts (ou axiosConfig.ts)
 import axios from 'axios';
 
-const BASE_URL = 'https://coupon-guard.onrender.com'; // Remplacez par votre URL Render
+const BASE_URL = 'http://localhost:4000'; // Remplacez par votre URL Render
 
 
-export const axiosform = axios.create({
+export const axiosTable = axios.create({
 	baseURL: `${BASE_URL}/sendMails`, // Notez le chemin corrigé
 	withCredentials: true, // Pour les cookies/sessions
 	timeout: 50000,
@@ -16,7 +16,7 @@ export const axiosform = axios.create({
   });
   
   // Intercepteur pour erreurs réseau
-  axiosform.interceptors.response.use(
+  axiosTable.interceptors.response.use(
 	response => response,
 	error => {
 	  if (error.message === 'Network Error') {
