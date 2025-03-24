@@ -13,23 +13,25 @@ const platsController = {
 
             const { title, description, price, image, category } = req.body
 
-            if(!title || !description || !price || !image || !category) {
-                
-                               
+            if(!title || !description || !price || !category) {               
               res.status(HttpCode.BAD_REQUEST).json({ msg: "Tous les champs sont obligatoires" });
                 log.error("Tous les champs sont obligatoires");
             }
 
-            const newPlat = await prisma.plats.create({
-                include: {
-                    category: true
-                },
+            const existingPlat = await prisma.plat.findUnique(
+              {  where: { title}}
+            )
+            if (existingPlat){
+                return res.status(HttpCode.BAD_REQUEST).json({msg: 'le plat existe deja', existingPlat})
+            }
+            const newPlat = await prisma.plat.create({
+               
                 data: {
                     title,
                     description,
                     price,
                     image,
-                    category
+                    category,
                 }
             })
 
@@ -43,8 +45,11 @@ const platsController = {
     },
     getplats: async (req: Request, res: Response) => {
         try {
-            const plats = await prisma.plats.findMany()
-            res.status(HttpCode.OK).json({ msg: "Plats retirés avec succès", plats });
+            const plats = await prisma.plat.findMany()
+
+            if(!plats){
+                return res.status(HttpCode.NOT_FOUND).json({ msg: "Aucun plat trouvé" });}
+            res.status(HttpCode.OK).json({ msg: "Plats recu avec succès", plats });
             log.info("Plats retirés avec succès", plats);
             
         } catch (error) {
@@ -56,9 +61,21 @@ const platsController = {
     getPlatById: async (req: Request, res: Response) => {
         try {
             const { id } = req.params
-            const plat = await prisma.plats.findUnique({
+            if(!id){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun id fournies" });
+            }
+            const plats = await prisma.plat.findUnique({
                 where: {
-                    id
+                    plat_id:id
+                }
+            })
+            if(!plats){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg : "le plat n'existe pas"})
+
+            }
+            const plat = await prisma.plat.findUnique({
+                where: {
+                    plat_id : id
                 }
             })
             res.status(HttpCode.OK).json({ msg: "Plat retiré avec succès", plat });
@@ -73,10 +90,22 @@ const platsController = {
     updatePlat: async (req: Request, res: Response) => {
         try {
             const { id } = req.params
-            const { title, description, price, image, category } = req.body
-            const plat = await prisma.plats.update({
+            if(!id){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun id fournies" });
+            }
+            const plats = await prisma.plat.findUnique({
                 where: {
-                    id
+                    plat_id:id
+                }
+            })
+            if(!plats){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg : "le plat n'existe pas"})
+
+            }
+            const { title, description, price, image, category } = req.body
+            const plat = await prisma.plat.update({
+                where: {
+                    plat_id:id
                 },
                 data: {
                     title,
@@ -98,9 +127,22 @@ const platsController = {
     deletePlat: async (req: Request, res: Response) => {
         try {
             const { id } = req.params
-            const plat = await prisma.plats.delete({
+            if(!id){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun id fournies" });
+            }
+            const plats = await prisma.plat.findUnique({
                 where: {
-                    id
+                    plat_id:id
+                }
+            })
+            if(!plats){
+                return res.status(HttpCode.BAD_REQUEST).json({ msg : "le plat n'existe pas"})
+
+            }
+
+            const plat = await prisma.plat.delete({
+                where: {
+                    plat_id:id
                 }
             })
             res.status(HttpCode.OK).json({ msg: "Plat supprimé avec succès", plat });

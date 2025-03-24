@@ -1,150 +1,154 @@
-// controllers/authController.js
-import { PrismaClient } from "@prisma/client";
-import z from "zod";
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+import { HttpCode } from '../core/constants';
+import log from '../core/config/index';
 
 const prisma = new PrismaClient();
 
-// Schéma Zod pour valider les données d'inscription
-const registerSchema = z.object({
-  nom: z.string().min(3, "Le nom doit contenir au moins 3 caractères"),
-  email: z.string().email("Veuillez entrer une adresse email valide"),
-});
+const usersController = {
+  // Créer un nouvel utilisateur
+  postUser: async (req: Request, res: Response) => {
+    try {
+      const { nom, email, numero } = req.body;
 
-// Schéma Zod pour valider l'OTP
-const verifyOTPSchema = z.object({
-  email: z.string().email(),
-  otp: z.string().length(6, "L'OTP doit contenir exactement 6 caractères"),
-});
+      // Vérifier que tous les champs obligatoires sont présents
+      if (!nom || !email) {
+        return res.status(HttpCode.BAD_REQUEST).json({ msg: "Le nom et l'email sont obligatoires" });
+      }
 
-// Schéma Zod pour valider le numéro de téléphone
-const phoneNumberSchema = z.object({
-  email: z.string().email(),
-  numero: z.string().regex(/^\+[1-9]\d{1,14}$/, "Numéro de téléphone invalide"),
-});
+      // Vérifier si l'utilisateur existe déjà
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (existingUser) {
+        return res.status(HttpCode.BAD_REQUEST).json({ msg: "L'utilisateur existe déjà", existingUser });
+      }
 
-// Générer un OTP aléatoire
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000).toString(); // OTP de 6 chiffres
-}
+      // Créer un nouvel utilisateur
+      const newUser = await prisma.user.create({
+        data: {
+          nom,
+          email,
+          numero,
+        },
+      });
 
-// Configuration de Nodemailer pour envoyer des emails
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+      res.status(HttpCode.OK).json({ msg: "Utilisateur ajouté avec succès", newUser });
+      log.info("Utilisateur ajouté avec succès", newUser);
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
+    }
   },
-});
 
-// Contrôleur unique pour gérer tout le processus
-export const handleAccountCreation = async (req, res) => {
-  try {
-    const { step, ...data } = req.body;
+  // Récupérer tous les utilisateurs
+  getUsers: async (req: Request, res: Response) => {
+    try {
+      const users = await prisma.user.findMany();
 
-    switch (step) {
-      case "register": {
-        // Étape 1 : Inscription
-        const validatedData = registerSchema.parse(data);
-
-        const { nom, email } = validatedData;
-
-        // Vérifier si l'utilisateur existe déjà
-        const existingUser = await prisma.user.findUnique({ where: { email } });
-        if (existingUser) {
-          return res.status(400).json({ message: "Cet email est déjà utilisé" });
-        }
-
-        // Générer un OTP
-        const otp = generateOTP();
-
-        // Créer l'utilisateur dans la base de données
-        await prisma.user.create({
-          data: {
-            nom,
-            email,
-            otp,
-            otpExpiresAt: new Date(Date.now() + 5 * 60 * 1000), // OTP expire après 5 minutes
-          },
-        });
-
-        // Envoyer l'OTP par email
-        const mailOptions = {
-          from: process.env.EMAIL_USER,
-          to: email,
-          subject: "Votre code OTP",
-          text: `Votre code OTP est : ${otp}. Il expire dans 5 minutes.`,
-        };
-
-        await transporter.sendMail(mailOptions);
-
-        res.status(200).json({
-          message: "Un code OTP a été envoyé à votre email. Veuillez le vérifier.",
-        });
-        break;
+      if (!users || users.length === 0) {
+        return res.status(HttpCode.NOT_FOUND).json({ msg: "Aucun utilisateur trouvé" });
       }
 
-      case "verify-otp": {
-        // Étape 2 : Vérification OTP
-        const validatedData = verifyOTPSchema.parse(data);
-
-        const { email, otp } = validatedData;
-
-        // Vérifier si l'utilisateur existe
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (!user) {
-          return res.status(400).json({ message: "Email non trouvé" });
-        }
-
-        // Vérifier si l'OTP est correct et n'a pas expiré
-        if (user.otp !== otp || new Date() > user.otpExpiresAt) {
-          return res.status(400).json({ message: "Code OTP invalide ou expiré" });
-        }
-
-        // Marquer l'utilisateur comme vérifié
-        await prisma.user.update({
-          where: { email },
-          data: { isVerified: true },
-        });
-
-        res.status(200).json({ message: "OTP validé avec succès" });
-        break;
-      }
-
-      case "add-phone-number": {
-        // Étape 3 : Ajout du numéro de téléphone
-        const validatedData = phoneNumberSchema.parse(data);
-
-        const { email, numero } = validatedData;
-
-        // Vérifier si l'utilisateur existe
-        const user = await prisma.user.findUnique({ where: { email } });
-        if (!user || !user.isVerified) {
-          return res.status(400).json({ message: "Email non trouvé ou OTP non vérifié" });
-        }
-
-        // Ajouter le numéro de téléphone et finaliser la création du compte
-        await prisma.user.update({
-          where: { email },
-          data: { numero },
-        });
-
-        res.status(200).json({ message: "Compte créé avec succès" });
-        break;
-      }
-
-      default: {
-        res.status(400).json({ message: "Étape inconnue" });
-      }
+      res.status(HttpCode.OK).json({ msg: "Utilisateurs récupérés avec succès", users });
+      log.info("Utilisateurs récupérés avec succès", users);
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
     }
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ errors: error.errors });
+  },
+
+  // Récupérer un utilisateur par son ID
+  getUserById: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun ID fourni" });
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { user_id : id },
+      });
+
+      if (!user) {
+        return res.status(HttpCode.NOT_FOUND).json({ msg: "Utilisateur non trouvé" });
+      }
+
+      res.status(HttpCode.OK).json({ msg: "Utilisateur récupéré avec succès", user });
+      log.info("Utilisateur récupéré avec succès", user);
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
     }
-    console.error(error);
-    res.status(500).json({ message: "Une erreur s'est produite" });
-  }
+  },
+
+  // Mettre à jour un utilisateur
+  updateUser: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun ID fourni" });
+      }
+
+      const { nom, email, numero } = req.body;
+
+      // Vérifier si l'utilisateur existe
+      const existingUser = await prisma.user.findUnique({
+        where: { user_id : id },
+      });
+      if (!existingUser) {
+        return res.status(HttpCode.NOT_FOUND).json({ msg: "Utilisateur non trouvé" });
+      }
+
+      // Mettre à jour l'utilisateur
+      const updatedUser = await prisma.user.update({
+        where: { user_id : id },
+        data: {
+          nom,
+          email,
+          numero,
+        },
+      });
+
+      res.status(HttpCode.OK).json({ msg: "Utilisateur mis à jour avec succès", updatedUser });
+      log.info("Utilisateur mis à jour avec succès", updatedUser);
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
+    }
+  },
+
+  // Supprimer un utilisateur
+  deleteUser: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(HttpCode.BAD_REQUEST).json({ msg: "Aucun ID fourni" });
+      }
+
+      // Vérifier si l'utilisateur existe
+      const existingUser = await prisma.user.findUnique({
+        where: { user_id : id },
+      });
+      if (!existingUser) {
+        return res.status(HttpCode.NOT_FOUND).json({ msg: "Utilisateur non trouvé" });
+      }
+
+      // Supprimer l'utilisateur
+      const deletedUser = await prisma.user.delete({
+        where: { user_id : id },
+      });
+
+      res.status(HttpCode.OK).json({ msg: "Utilisateur supprimé avec succès", deletedUser });
+      log.info("Utilisateur supprimé avec succès", deletedUser);
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
+    }
+  },
 };
+
+export default usersController;

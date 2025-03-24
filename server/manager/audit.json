@@ -1,0 +1,16 @@
+{
+    "keepSettings": {
+        "type": 2,
+        "amount": 10
+    },
+    "auditFilename": "/home/herman-dev/bacdev/restaurant-project/server/manager/audit.json",
+    "hashType": "md5",
+    "extension": ".log",
+    "files": [
+        {
+            "date": 1742644527850,
+            "name": "/home/herman-dev/bacdev/restaurant-project/server/manager/File-2025-03-22.0.log",
+            "hash": "0cd941099c7805d48475bd8468ab1db4"
+        }
+    ]
+}

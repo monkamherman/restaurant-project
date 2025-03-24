@@ -1,15 +1,18 @@
-// src/server.ts
+// src/app.ts
 import express from 'express';
 // import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import cors from 'cors';
-import { ONE_HUNDRED, SIXTY } from './core/constants';
+import { ONE_HUNDRED, SIXTY } from './core/constants/index';
 import { logger } from 'env-var';
 import { createClient } from 'redis';
-import registerRoutes from './routes';
 import helmet from 'helmet';
-import compression from 'compression';
+import { registerRoutes } from './routes/crud';
+// import compression from 'compression';
 import cacheControl from 'express-cache-controller';
+// import user from './routes/userRoute';
+// import plat from './routes/platRoute';
+
 
 // Création du client Redis en dehors de toute fonction
 const redisClient = createClient({
@@ -26,8 +29,8 @@ const redisClient = createClient({
 	try {
 	  await redisClient.connect();
 	  console.log("Connexion Redis établie avec succès.");
-	} catch (err) {
-	  console.error('Erreur lors de la connexion Redis:');
+	} catch (error) {
+	  console.error('Erreur lors de la connexion Redis:', error);
 	  process.exit(1); // Arrête le serveur si Redis ne se connecte pas
 	}
 }
@@ -41,9 +44,14 @@ const morganStream = {
 };
 
 const app = express();
+app.use(express.json());
 
+// const registerRoutes = (app: express.Application) => {
+//   app.use('/api/', user);
+//   app.use('/plat', plat);
+// };
 
-registerRoutes(app)
+registerRoutes(app);
 
 // Configuration CORS dynamique
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',');
@@ -124,7 +132,7 @@ app.use(async (req, res, next) => {
 	next();
   });
 
-app.use(compression())
+// app.use(compression())
 app.use(cacheControl({ maxAge: 86400 }));
 // Logging
 app.use(morgan('combined', { stream: morganStream }));

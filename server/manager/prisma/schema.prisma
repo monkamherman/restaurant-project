@@ -13,93 +13,89 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model user {
-  user_id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  email String @unique
-  password String
-  role Role @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  numero Int
+  user_id String @id @default(auto()) @map("_id") @db.ObjectId
+  nom          String
+  email        String    @unique
+  numero       String?
+  otp          String?
+  otpExpiresAt DateTime?
+  role         Role      @default(USER)
+  isVerified   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   reservations Reservation[]
-  commandes   commande[]
-  avis        avis[]
+  commandes    commande[]
+  avis         avis[]
 }
 
 model table {
-  table_id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  status TableStatus @default(AVAILABLE)
+  table_id String      @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  status   TableStatus @default(AVAILABLE)
   capacity Int
 
-
-    reservations Reservation[]
+  reservations Reservation[]
 }
 
 model plat {
-  plat_id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
+  plat_id     String        @id @default(auto()) @map("_id") @db.ObjectId
+  title       String        @unique
   description String
-  price Float
-  image String?
-  category String
-  likes Int? @default(0)
-  categorie PlatsCategory
+  price       Float
+  image       String?
+  category    PlatsCategory
+  likes       Int?          @default(0)
 
-
-   commandes CommandePlat[]
-
+  commandes CommandePlat[]
 }
 
 model commande {
-  commande_id String @id @default(auto()) @map("_id") @db.ObjectId
-  status CommandeStatus @default(en_attente)
-  prix Float
+  commande_id   String         @id @default(auto()) @map("_id") @db.ObjectId
+  status        CommandeStatus @default(en_attente)
+  prix          Float
   nombreDePlats Int
-  adresse String
-  date DateTime @default(now())
+  adresse       String
+  date          DateTime       @default(now())
 
-  userId String @db.ObjectId
-   users     user      @relation(fields: [userId], references: [user_id])
-  plats    CommandePlat[]
+  userId String         @db.ObjectId
+  users  user           @relation(fields: [userId], references: [user_id])
+  plats  CommandePlat[]
 }
 
 model avis {
-  avis_id String @id @default(auto()) @map("_id") @db.ObjectId
+  avis_id String   @id @default(auto()) @map("_id") @db.ObjectId
   message String
-  date DateTime @default(now())
-
+  date    DateTime @default(now())
 
   userId String @db.ObjectId
-   users    user      @relation(fields: [userId], references: [user_id])
- 
+  users  user   @relation(fields: [userId], references: [user_id])
 }
 
 model Reservation {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String    @db.ObjectId
-  tableId         String    @db.ObjectId
-  date            DateTime
-  numberOfPeople  Int
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  tableId        String   @db.ObjectId
+  date           DateTime
+  numberOfPeople Int
 
   // Relations
-  user            user      @relation(fields: [userId], references: [user_id])
-  table           table     @relation(fields: [tableId], references: [table_id])
+  user  user  @relation(fields: [userId], references: [user_id])
+  table table @relation(fields: [tableId], references: [table_id])
 }
 
 model CommandePlat {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  commandeId String   @db.ObjectId
-  platId     String   @db.ObjectId
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  commandeId String @db.ObjectId
+  platId     String @db.ObjectId
 
-  commande   commande @relation(fields: [commandeId], references: [commande_id])
-  plat       plat     @relation(fields: [platId], references: [plat_id])
+  commande commande @relation(fields: [commandeId], references: [commande_id])
+  plat     plat     @relation(fields: [platId], references: [plat_id])
 
   @@unique([commandeId, platId]) // Garantit que la combinaison est unique
 }
+
 enum CommandeStatus {
   en_attente
   confirmer
