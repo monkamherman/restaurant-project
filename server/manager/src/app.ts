@@ -55,10 +55,7 @@ app.use(express.json());
 registerRoutes(app);
 
 app.use(cors({
-  origin: 'http://localhost:10000', // Your frontend URL
-  credentials: true, // Required if using cookies/auth
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: '*'
 }));
 // Middleware CORS critique
 app.use((req, res, next) => {
@@ -101,11 +98,11 @@ app.use(helmet({
     includeSubDomains: true,
     preload: true,
   },
-  // frameguard: { action: 'deny' }, // Empêche le clickjacking
-  // hidePoweredBy: true,           // Masque l'en-tête X-Powered-By
-  // noSniff: true,                 // Empêche le sniffing MIME
-  // referrerPolicy: { policy: 'strict-origin-when-cross-origin' }, // Politique de référent
-  // xssFilter: true, 
+  frameguard: { action: 'deny' }, // Empêche le clickjacking
+  hidePoweredBy: true,           // Masque l'en-tête X-Powered-By
+  noSniff: true,                 // Empêche le sniffing MIME
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }, // Politique de référent
+  xssFilter: true, 
 }));
 // Health check
 app.get('/health', (req, res) => {

@@ -2,6 +2,7 @@
   "name": "react-template",
   "private": "true",
   "version": "0.0.0",
+  "proxy": "http://localhost:4000",
   "description": "description of the projet",
   "license": "MIT",
   "main": "index.html",

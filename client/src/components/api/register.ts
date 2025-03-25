@@ -10,7 +10,8 @@ export const axiosRegister = axios.create({
 	timeout: 50000,
 	headers: {
 	  'Content-Type': 'application/json',
-	  'Accept': 'application/json'
+	  'Accept': 'application/json',
+	  'Access-Control-Allow-Origin': '*'
 	},
 	validateStatus: (status) => status < 500
   });
