@@ -1,12 +1,12 @@
 // Fichier api.ts (ou axiosConfig.ts)
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4000'; // Remplacez par votre URL Render
+const BASE_URL = 'http://localhost:2000'; // Remplacez par votre URL Render
 
 
 export const axiosRegister = axios.create({
 	baseURL: `${BASE_URL}/`, 
-	withCredentials: true, 
+	withCredentials: false, 
 	timeout: 50000,
 	headers: {
 	  'Content-Type': 'application/json',

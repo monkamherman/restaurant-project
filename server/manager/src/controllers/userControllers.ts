@@ -113,7 +113,7 @@ const usersController = {
           res.status(HttpCode.BAD_REQUEST).json({ msg: "Étape inconnue" });
         }
       }
-      
+
       if(user){
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
@@ -138,6 +138,41 @@ const usersController = {
       return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
     }
   },
+  // Contrôleur pour renvoyer l'OTP
+ resendOTP: async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    // Vérifier si l'utilisateur existe
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) {
+      return res.status(HttpCode.NOT_FOUND).json({ msg: "Email non trouvé" });
+    }
+
+    // Générer un nouvel OTP
+    const generatedOTP = generateOTP();
+
+    // Mettre à jour l'OTP et sa date d'expiration
+    await prisma.user.update({
+      where: { email },
+      data: {
+        otp: generatedOTP,
+        otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000), // OTP expire après 2 minutes
+      },
+    });
+
+    // Envoyer l'OTP par email
+    const emailText = `Votre nouveau code OTP est : ${generatedOTP}. Il expire dans 2 minutes.`;
+    await sendMail(email, emailText);
+
+    res.status(HttpCode.OK).json({ msg: "Un nouveau code OTP a été envoyé à votre email." });
+  } catch (error) {
+    console.error(error);
+    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "Erreur interne du serveur" });
+  }
+},
    // Récupérer tous les utilisateurs
    getUsers: async (req: Request, res: Response) => {
     try {

@@ -22,6 +22,16 @@ export default defineConfig({
     },
   },
 
+//   server: {
+//     proxy: {
+//         '/user': {
+//             target: 'http://localhost:4000',
+//             changeOrigin: true,
+//             secure: false
+//         }
+//     }
+// },
+
   server: {
     host: '0.0.0.0', // Valeur par défaut
     port: 10000, // Valeur par défaut

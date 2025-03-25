@@ -27,8 +27,9 @@ const Header: React.FC<HeaderProps> = () => {
           </button>
           {/* Dropdown Menu */}
           <ul className="absolute hidden group-hover:block bg-white shadow rounded p-2 mt-2">
-            <li><a href="#" className="block px-2 py-1 hover:bg-gray-100">Menu Item 1</a></li>
-            <li><a href="#" className="block px-2 py-1 hover:bg-gray-100">Menu Item 2</a></li>
+            <li><a href="#" className="block px-2 py-1 text-dark dark:text-color hover:text-color">Petit dejeuner</a></li>
+            <li><a href="#" className="block px-2 py-1 text-dark dark:text-color hover:text-color">Dejeuner</a></li>
+            <li><a href="#" className="block px-2 py-1 text-dark dark:text-color hover:text-color">Diner</a></li>
           </ul>
         </div>
         <div className="relative group">

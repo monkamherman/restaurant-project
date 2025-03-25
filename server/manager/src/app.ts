@@ -36,7 +36,6 @@ const redisClient = createClient({
 	}
 }
 
-startServer()
 
 
 
@@ -55,28 +54,35 @@ app.use(express.json());
 
 registerRoutes(app);
 
-// Configuration CORS dynamique
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',');
+app.use(cors({
+  origin: 'http://localhost:10000', // Your frontend URL
+  credentials: true, // Required if using cookies/auth
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+// Middleware CORS critique
+app.use((req, res, next) => {
+  // Autorise spécifiquement votre frontend
+  res.header('Access-Control-Allow-Origin', 'http://localhost:10000');
+  
+  // Nécessaire si vous utilisez des cookies/JWT
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Méthodes autorisées (inclure OPTIONS)
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  
+  // En-têtes autorisés
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  // Répondre immédiatement aux requêtes OPTIONS (préflight)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});
 
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    console.log('origin recived',origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`CORS blocked request from origin: ${origin}`);
-      callback(new Error('Blocked by CORS policy'));
-    }
-    
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With','accept'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
 
-// Middlewares critiques en premier
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
@@ -95,11 +101,11 @@ app.use(helmet({
     includeSubDomains: true,
     preload: true,
   },
-  frameguard: { action: 'deny' }, // Empêche le clickjacking
-  hidePoweredBy: true,           // Masque l'en-tête X-Powered-By
-  noSniff: true,                 // Empêche le sniffing MIME
-  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }, // Politique de référent
-  xssFilter: true, 
+  // frameguard: { action: 'deny' }, // Empêche le clickjacking
+  // hidePoweredBy: true,           // Masque l'en-tête X-Powered-By
+  // noSniff: true,                 // Empêche le sniffing MIME
+  // referrerPolicy: { policy: 'strict-origin-when-cross-origin' }, // Politique de référent
+  // xssFilter: true, 
 }));
 // Health check
 app.get('/health', (req, res) => {
@@ -150,6 +156,11 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use((req, res, next) => {
+  console.log('Requête reçue:', req.method, req.url);
+  next();
+});
+
 
 // Gestion des erreurs CORS
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -160,7 +171,10 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   }
 });
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 10000;
+startServer()
+
+
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 2000;
 
 // Ajoutez ce contrôle d'erreur
 app.listen(PORT, '0.0.0.0', () => {

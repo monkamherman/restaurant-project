@@ -8,7 +8,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between p-8">
+    <div className="flex flex-col md:flex-row items-center justify-between p-8 mt-4">
       {/* Section Texte */}
       <div className="md:w-1/2">
         <h1 className="md:text-4xl text-[1.5rem] md:text-start text-center font-bold mb-6 text-green-700">

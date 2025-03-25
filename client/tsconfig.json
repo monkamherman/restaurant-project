@@ -8,6 +8,16 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["dom", "es6"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "include": [
+    "src/**/*"
+  ]
   }
 }

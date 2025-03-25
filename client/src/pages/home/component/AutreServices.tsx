@@ -36,7 +36,7 @@ const services: Service[] = [
 
 const OurStoryAndServices: React.FC = () => {
   return (
-    <div className="mt-8 md:flex gap-4 justify-center items-center">
+    <div className="mt-8 md:flex gap-4 justify-center items-center mt-4">
       {/* Section Titre */}
       <div className="text-center mb-4">
         <span className="text-red-500 text-sm uppercase font-semibold">Notre Histoire & Services</span>
@@ -50,7 +50,7 @@ const OurStoryAndServices: React.FC = () => {
       </div>
 
       {/* Services */}
-      <div className="flex justify-between w-full items-center  flex-col gap-4 space-4 mt-8 flex-wrap">
+      <div className="flex justify-between w-full items-center  flex-col md:flex-row gap-4 space-4 mt-8 flex-wrap">
         {services.map((service, index) => (
           <div key={index} className="bg-white dark:shadow-dark-mode shadow-light rounded-lg p-4 md:w-64  text-center">
             {service.icon}

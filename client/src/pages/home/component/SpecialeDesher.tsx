@@ -69,7 +69,7 @@ const SpecialDishes: React.FC = () => {
   return (
     <div className="mt-8 relative">
       {/* Section Title */}
-      <div className="text-center mb-4">
+      <div className="text-center m-4 ">
         <span className="text-red-500 text-sm uppercase font-semibold">Special Dishes</span>
         <h2 className="text-2xl font-bold mt-2 text-dark dark:text-white">Standout Dishes From Our Menu</h2>
       </div>

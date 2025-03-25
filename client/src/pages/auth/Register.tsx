@@ -4,7 +4,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
+// import { axiosUser } from '@/components/api/user';
 import { Input } from '@/components/ui/input';
+import { fetchWrapper } from '@/utils/fetchWrapper';
 import {
   Form,
   FormControl,
@@ -13,6 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
+import {  useNavigate } from "react-router-dom";
 
 const registerSchema = z.object({
   nom: z.string().min(3, 'Le nom doit contenir au moins 3 caractères'),
@@ -22,6 +26,9 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const Register: React.FC = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -30,10 +37,35 @@ const Register: React.FC = () => {
     },
   });
 
-  const onSubmit = (data: RegisterFormValues) => {
-    // Stocker les données dans le localStorage
-    localStorage.setItem('userData', JSON.stringify(data));
-    alert('Inscription réussie ! Veuillez vérifier votre OTP.');
+  const onSubmit = async (data: RegisterFormValues) => {
+    try {
+      // Appel API pour l'inscription
+      await fetchWrapper('http://localhost:4000/user', {
+        method: 'POST',
+        body: { step: 'register', ...data },
+      });
+  
+
+      // Stocker les données dans le localStorage
+      localStorage.setItem('userData', JSON.stringify(data));
+
+      // Afficher un toast de succès
+      toast({
+        title: 'Inscription réussie',
+        description: 'Un code OTP a été envoyé à votre email.',
+      });
+
+      // Rediriger vers la page de vérification OTP
+      navigate ('/verify-otp')
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: "Une erreur s'est produite lors de l'inscription.",
+        variant: 'destructive',
+      });
+      console.error(error);
+      
+    }
   };
 
   return (
